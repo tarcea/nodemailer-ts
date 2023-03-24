@@ -8,3 +8,5 @@ This is just a demo, how to send emails using NodeJS.
 4. run `npm install` and then `npm start`
 
 Make a request like so: `http://localhost:3030/?email=email@something.com`
+
+Replace `email@something.com` with a real emai :-)
