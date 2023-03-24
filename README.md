@@ -1,6 +1,6 @@
 # Send emails with nodemailer (attachments and calendar events)
 
-This is just a demo how to send emails using NodeJS.
+This is just a demo, how to send emails using NodeJS.
 
 1. configure a SMTP service (I used https://app.sendinblue.com/)
 2. clone the repo `git clone https://github.com/tarcea/nodemailer-ts.git`
