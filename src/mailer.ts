@@ -1,5 +1,7 @@
 import 'dotenv/config';
+import { EventAttributes } from 'ics';
 import nodemailer, { Transporter } from 'nodemailer';
+import { createIcs } from './ics';
 
 const hostname = process.env.SMTP_HOST;
 const username = process.env.SMTP_USERNAME;
@@ -19,42 +21,40 @@ const transporter: Transporter = nodemailer.createTransport({
   // logger: true,
 });
 
-const ics = `
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//ical.marudot.com//iCal Event Maker
-CALSCALE:GREGORIAN
-BEGIN:VTIMEZONE
-TZID:Europe/Berlin
-LAST-MODIFIED:20201011T015911Z
-TZURL:http://tzurl.org/zoneinfo-outlook/Europe/Berlin
-X-LIC-LOCATION:Europe/Berlin
-BEGIN:DAYLIGHT
-TZNAME:CEST
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-DTSTART:19700329T020000
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
-END:DAYLIGHT
-BEGIN:STANDARD
-TZNAME:CET
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-DTSTART:19701025T030000
-RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
-END:STANDARD
-END:VTIMEZONE
-BEGIN:VEVENT
-DTSTAMP:20230324T151507Z
-UID:1679670873588-88344@ical.marudot.com
-DTSTART;TZID=Europe/Berlin:20230331T120000
-DTEND;TZID=Europe/Berlin:20230331T182000
-SUMMARY:Test Event as ics file
-DESCRIPTION:test description
-LOCATION:Fotografiska\, Stadsgårdshamnen 22\, 116 45 Stockholm
-END:VEVENT
-END:VCALENDAR
-`;
+export const event: EventAttributes = {
+  start: [2023, 3, 29, 7, 30],
+  duration: { hours: 4, minutes: 30 },
+  title: 'Office Booking',
+  description: 'Your booking at Epicenter Stockholm',
+  location: 'Mäster Samuelsgatan 36, 111 57 Stockholm',
+  url: 'https://weareepicenter.com/stockholm/',
+  geo: { lat: 59.33694998989967, lon: 18.066686742188832 },
+  categories: ['booking', 'coworking space stockholm', 'Epicenter'],
+  status: 'CONFIRMED',
+  busyStatus: 'BUSY',
+  organizer: { name: 'Admin', email: 'admin@gmail123.com' },
+  attendees: [
+    {
+      name: 'John Snow',
+      email: 'johnsnow@snow.com',
+      rsvp: true,
+      partstat: 'ACCEPTED',
+      role: 'REQ-PARTICIPANT',
+    },
+    {
+      name: 'Brittany Seaton',
+      email: 'bs@somecoolcompany.com',
+      role: 'OPT-PARTICIPANT',
+    },
+    {
+      name: 'GT',
+      email: 'gt@icloud22.com',
+      role: 'OPT-PARTICIPANT',
+    },
+  ],
+};
+
+const ics: string = createIcs(event);
 
 export const sendNewEmail = async (sendTo: string) => {
   try {
@@ -67,7 +67,7 @@ export const sendNewEmail = async (sendTo: string) => {
 				<h3>
 					Hi, your booking is confirmed!!
 				</h3>
-				<p>see the details below...</p>
+				<p>This is just a test to see how the attached calendar event looks like in different email clients.</p>
 			`,
       // icalEvent: {
       //   // filename: 'invitation.ics',
