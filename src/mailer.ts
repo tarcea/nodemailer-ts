@@ -3,22 +3,14 @@ import { EventAttributes } from 'ics';
 import nodemailer, { Transporter } from 'nodemailer';
 import { createIcs } from './ics';
 
-const hostname = process.env.SMTP_HOST;
-const username = process.env.SMTP_USERNAME;
-const password = process.env.SMTP_PASSWORD;
-const port = +process.env.SMTP_PORT!;
-const sender = process.env.SMTP_SENDER;
+const sender = process.env.SMTP_FROM;
 
 const transporter: Transporter = nodemailer.createTransport({
-  host: hostname,
-  port: port,
-  secure: false,
-  requireTLS: true,
+  service: 'gmail',
   auth: {
-    user: username,
-    pass: password,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_SECRET,
   },
-  // logger: true,
 });
 
 export const event: EventAttributes = {
